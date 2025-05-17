@@ -8,6 +8,14 @@ A MCP server that provides text-to-image generation capabilities using Stable Di
 
 ## Installation
 
+### Installing via Smithery
+
+To install Image Generation Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@Ichigo3766/image-gen-mcp):
+
+```bash
+npx -y @smithery/cli install @Ichigo3766/image-gen-mcp --client claude
+```
+
 ### Prerequisites
 - Node.js
 - Access to a Stable Diffusion WebUI instance with API enabled
