@@ -1,0 +1,87 @@
+# Smithery configuration file: https://smithery.ai/docs/build/project-config
+
+startCommand:
+  type: stdio
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => {
+      const env = {
+        SD_WEBUI_URL: config.sdWebuiUrl,
+        SD_AUTH_USER: config.sdAuthUser || undefined,
+        SD_AUTH_PASS: config.sdAuthPass || undefined,
+        SD_OUTPUT_DIR: config.sdOutputDir,
+        SD_RESIZE_MODE: String(config.sdResizeMode),
+        SD_UPSCALE_MULTIPLIER: String(config.sdUpscaleMultiplier),
+        SD_UPSCALE_WIDTH: String(config.sdUpscaleWidth),
+        SD_UPSCALE_HEIGHT: String(config.sdUpscaleHeight),
+        SD_UPSCALER_1: config.sdUpscaler1,
+        SD_UPSCALER_2: config.sdUpscaler2,
+        REQUEST_TIMEOUT: String(config.requestTimeout)
+      };
+      return {
+        command: 'node',
+        args: ['build/index.js'],
+        env
+      };
+    }
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - sdWebuiUrl
+    properties:
+      sdWebuiUrl:
+        type: string
+        default: http://127.0.0.1:7860
+        description: URL of Stable Diffusion WebUI
+      sdAuthUser:
+        type: string
+        description: Authentication username (if required)
+      sdAuthPass:
+        type: string
+        description: Authentication password (if required)
+      sdOutputDir:
+        type: string
+        default: ./output
+        description: Directory for generated images
+      sdResizeMode:
+        type: number
+        default: 0
+        description: Upscaling mode (0=multiplier,1=dimensions)
+      sdUpscaleMultiplier:
+        type: number
+        default: 4
+        description: Upscale multiplier if mode=0
+      sdUpscaleWidth:
+        type: number
+        default: 512
+        description: Upscale width if mode=1
+      sdUpscaleHeight:
+        type: number
+        default: 512
+        description: Upscale height if mode=1
+      sdUpscaler1:
+        type: string
+        default: R-ESRGAN 4x+
+        description: Primary upscaler model
+      sdUpscaler2:
+        type: string
+        default: None
+        description: Secondary upscaler model
+      requestTimeout:
+        type: number
+        default: 300000
+        description: Request timeout in ms
+  exampleConfig:
+    sdWebuiUrl: http://sd-webui:7860
+    sdAuthUser: user
+    sdAuthPass: pass
+    sdOutputDir: ./output
+    sdResizeMode: 0
+    sdUpscaleMultiplier: 4
+    sdUpscaleWidth: 512
+    sdUpscaleHeight: 512
+    sdUpscaler1: R-ESRGAN 4x+
+    sdUpscaler2: None
+    requestTimeout: 300000
