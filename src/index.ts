@@ -53,7 +53,7 @@ interface SDAPIPayload {
   height: number;
   cfg_scale: number;
   sampler_name: string;
-  scheduler_name: string;
+  scheduler: string;
   seed: number;
   n_iter: number;
   restore_faces?: boolean;
@@ -268,7 +268,7 @@ class ImageGenServer {
               seed: args.seed ?? -1,
               n_iter: args.batch_size || 1,
               distilled_cfg_scale: args.distilled_cfg_scale || 3.5,
-              scheduler_name: args.scheduler_name || 'Simple',
+              scheduler: args.scheduler_name || 'Simple',
               tiling: !!args.tiling,
               restore_faces: !!args.restore_faces
             };
