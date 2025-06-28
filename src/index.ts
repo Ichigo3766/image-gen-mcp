@@ -210,8 +210,8 @@ class ImageGenServer {
                 description: 'Array of image file paths to upscale'
               },
               resize_mode: {
-                type: 'number',
-                enum: [0, 1],
+                type: 'string',
+                enum: ['0', '1'],
                 description: '0 for multiplier mode (default), 1 for dimension mode'
               },
               upscaling_resize: {
@@ -337,8 +337,11 @@ class ImageGenServer {
               };
             }));
 
+            // Convert resize_mode to number if present, otherwise use default
+            const resizeModeNum = args.resize_mode !== undefined ? Number(args.resize_mode) : SD_RESIZE_MODE;
+
             const payload: UpscaleImagePayload = {
-              resize_mode: args.resize_mode ?? SD_RESIZE_MODE,
+              resize_mode: resizeModeNum,
               show_extras_results: true,
               gfpgan_visibility: 0,
               codeformer_visibility: 0,
@@ -441,10 +444,9 @@ function isUpscaleImagesArgs(value: unknown): value is UpscaleImagesArgs {
     return false;
   }
 
-  // Validate optional numeric fields
+  // Validate optional resize_mode as string '0' or '1'
   if (v.resize_mode !== undefined) {
-    const mode = Number(v.resize_mode);
-    if (isNaN(mode) || ![0, 1].includes(mode)) return false;
+    if (typeof v.resize_mode !== 'string' || !['0', '1'].includes(v.resize_mode)) return false;
   }
 
   if (v.upscaling_resize !== undefined) {
